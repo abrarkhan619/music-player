@@ -8,43 +8,10 @@ const listContainer = document.getElementById("listContainer")
 const songTitle = document.getElementById("songTitle")
 let totalTime = 0;
 let currentTime = 0;
+let songIndex = 0;
 let isPlaying = false;
 
 window.onload = playSong;
-
-function playSong(){
-    // audio.src = "music.mp3";
-    console.log(audio)
-    
-    
-    playBtn.addEventListener('click',function(){
-        if(!isPlaying){
-            audio.play();
-            isPlaying = true;
-            totalTime = audio.duration;
-            range.max = totalTime;
-            playImage.src = "icons/pause.png";
-        }else{
-            audio.pause();
-            isPlaying = false;
-            playImage.src = "icons/play.png";
-        }
-       audio.addEventListener('ended',function(){
-            audio.currentTime = 0
-            audio.pause();
-            isPlaying = false;
-            range.value = 0;
-            playImage.src = "icons/play.png";
-        })
-        audio.addEventListener('timeupdate',function(){
-            range.value = audio.currentTime;
-        })
-        range.addEventListener('change',function(){
-            audio.currentTime = range.value;
-        })
-       
-    })
-}
 
 class song {
     constructor(id, songName, artist, thumbnail) {
@@ -96,9 +63,41 @@ listContainer.appendChild(createSongList());
 listContainer.onclick = (e) => {
     // console.log(e);
     const clickedItem = e.target;
-    
     audio.src = '/music/' + clickedItem.innerText + '.mp3';
     songTitle.innerText = clickedItem.innerText;
     console.log('/music/' + clickedItem.innerText + '.mp3');
+    audio.play();
+}
+
+function playSong(){
+    audio.src = `/music/${songList[songIndex].songName} - ${songList[songIndex].artist}.mp3`;
+    songTitle.innerText = `${songList[songIndex].songName} - ${songList[songIndex].artist}`
     
+    playBtn.addEventListener('click',function(){
+        if(!isPlaying){
+            audio.play();
+            isPlaying = true;
+            totalTime = audio.duration;
+            range.max = totalTime;
+            playImage.src = "icons/pause.png";
+        }else{
+            audio.pause();
+            isPlaying = false;
+            playImage.src = "icons/play.png";
+        }
+       audio.addEventListener('ended',function(){
+            audio.currentTime = 0
+            audio.pause();
+            isPlaying = false;
+            range.value = 0;
+            playImage.src = "icons/play.png";
+        })
+        audio.addEventListener('timeupdate',function(){
+            range.value = audio.currentTime;
+        })
+        range.addEventListener('change',function(){
+            audio.currentTime = range.value;
+        })
+       
+    })
 }
