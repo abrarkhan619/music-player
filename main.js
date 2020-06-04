@@ -13,7 +13,7 @@ const createPlaylistBtn = document.getElementById("createPlaylistBtn");
 let totalTime = 0;
 let currentTime = 0;
 let songIndex = 0;
-let isPlaying = false;
+let isPlaying = true;
 
 // Class object constructor (I think its called)
  
@@ -80,46 +80,34 @@ listContainer.onclick = (e) => {
     audio.play();
 }
 
-function playSong(){
-    audio.src = `/music/${songList[songIndex].songName} - ${songList[songIndex].artist}.mp3`;
-    songTitle.innerText = `${songList[songIndex].songName} - ${songList[songIndex].artist}`
-    
-    playBtn.addEventListener('click',function(){
-        console.log("clicked");
-        
-        if(!isPlaying){
-            audio.play();
-            isPlaying = true;
-            totalTime = audio.duration;
-            range.max = totalTime;
-            playImage.src = "icons/pause.png";
-        }else{
-            audio.pause();
-            isPlaying = false;
-            playImage.src = "icons/play.png";
-        }
-       audio.addEventListener('ended',function(){
-            audio.currentTime = 0
-            audio.pause();
-            isPlaying = false;
-            range.value = 0;
-            playImage.src = "icons/play.png";
-        })
-        audio.addEventListener('timeupdate',function(){
-            range.value = audio.currentTime;
-        })
-        range.addEventListener('change',function(){
-            audio.currentTime = range.value;
-        })
-       
-    })
+////// Play song
+
+function playSong() {
+    if(isPlaying){
+        audio.play();
+        playImage.src = "icons/pause.png";
+        isPlaying = false;
+    } else {
+        playImage.src = "icons/play.png";
+        audio.pause();
+        isPlaying = true;
+    }
 }
+
+playBtn.addEventListener('click', playSong);
+
+audio.addEventListener('ended', nextSong);
+
+
+///// Next + previous song functions
 
 function nextSong() {
     songIndex++;
     if (songIndex > songList.length - 1) { songIndex = 0 };
     audio.src = `music/${songList[songIndex].songName} - ${songList[songIndex].artist}.mp3`;
     songTitle.innerText = `${songList[songIndex].songName} - ${songList[songIndex].artist}`;
+    isPlaying = true;
+    playSong();
 }
 
 function previousSong() {
@@ -127,18 +115,53 @@ function previousSong() {
     if (songIndex < 0 ) { songIndex = songList.length - 1 };
     audio.src = `music/${songList[songIndex].songName} - ${songList[songIndex].artist}.mp3`;
     songTitle.innerText = `${songList[songIndex].songName} - ${songList[songIndex].artist}`
+    isPlaying = true;
+    playSong();
 }
 
 nextBtn.addEventListener('click',function(){
     nextSong()
-    audio.play()
+    // audio.play()
     playImage.src = "icons/pause.png";
 })
 
 prevBtn.addEventListener('click',function(){
     previousSong()
-    audio.play()
+    // audio.play()
     playImage.src = "icons/pause.png";
+})
+
+///// Update progress value
+
+function updateProgressValue() {
+    range.max = audio.duration;
+    range.value = audio.currentTime;
+    document.querySelector('.currentTime').innerHTML = (formatTime(Math.floor(audio.currentTime)));
+    if (document.querySelector('.durationTime').innerHTML === "NaN:NaN") {
+        document.querySelector('.durationTime').innerHTML = "0:00";
+    } else {
+        document.querySelector('.durationTime').innerHTML = (formatTime(Math.floor(audio.duration)));
+    }
+};
+
+// convert song.currentTime and song.duration into MM:SS format
+function formatTime(seconds) {
+    let min = Math.floor((seconds / 60));
+    let sec = Math.floor(seconds - (min * 60));
+    if (sec < 10){ 
+        sec  = `0${sec}`;
+    };
+    return `${min}:${sec}`;
+};
+
+// run updateProgressValue ever 500 ms
+setInterval(updateProgressValue, 500);
+
+// function where progressBar.value is changed when slider thumb is dragged without auto-playing audio
+
+range.addEventListener('change', function(){
+    audio.currentTime = range.value;
+
 })
 
 ///// Shuffle songs
@@ -216,6 +239,7 @@ search.addEventListener('input', filter)
 ////////
 
 window.onload = function() {
-    playSong();
+    audio.src = `/music/${songList[songIndex].songName} - ${songList[songIndex].artist}.mp3`;
+    songTitle.innerText = `${songList[songIndex].songName} - ${songList[songIndex].artist}`
     // inactivityTime();
 }
