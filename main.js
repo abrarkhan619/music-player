@@ -6,9 +6,12 @@ const range = document.getElementById("range");
 const playImage = document.getElementById("playImage");
 const audio = document.getElementById("audio");
 const listContainer = document.getElementById("listContainer");
+const playlistContainer = document.getElementById("playlistContainer")
 const songTitle = document.getElementById("songTitle");
 const search = document.getElementById("search");
 const createPlaylistBtn = document.getElementById("createPlaylistBtn");
+const savePlaylistBtn = document.getElementById("savePlaylistBtn");
+
 
 let totalTime = 0;
 let currentTime = 0;
@@ -16,7 +19,7 @@ let songIndex = 0;
 let isPlaying = true;
 
 // Class object constructor (I think its called)
- 
+
 class song {
     constructor(id, songName, artist, thumbnail) {
         this.id = id
@@ -59,7 +62,14 @@ const createSongList = () => {
 
     for (let i = 0; i < songList.length; i++) {
         const item = document.createElement('li');
+        const inputItem = document.createElement('input')
+
+        inputItem.className = "checkboxItems"
+        inputItem.setAttribute('type', 'checkbox')
+        inputItem.setAttribute('value', songList[i].songName + " - " + songList[i].artist)
+
         item.className = "liAllSongs";
+        item.appendChild(inputItem)
         item.appendChild(document.createTextNode(songList[i].songName + " - " + songList[i].artist))
         list.appendChild(item)
     }
@@ -83,7 +93,7 @@ listContainer.onclick = (e) => {
 ////// Play song
 
 function playSong() {
-    if(isPlaying){
+    if (isPlaying) {
         audio.play();
         playImage.src = "icons/pause.png";
         isPlaying = false;
@@ -112,20 +122,20 @@ function nextSong() {
 
 function previousSong() {
     songIndex--;
-    if (songIndex < 0 ) { songIndex = songList.length - 1 };
+    if (songIndex < 0) { songIndex = songList.length - 1 };
     audio.src = `music/${songList[songIndex].songName} - ${songList[songIndex].artist}.mp3`;
     songTitle.innerText = `${songList[songIndex].songName} - ${songList[songIndex].artist}`
     isPlaying = true;
     playSong();
 }
 
-nextBtn.addEventListener('click',function(){
+nextBtn.addEventListener('click', function () {
     nextSong()
     // audio.play()
     playImage.src = "icons/pause.png";
 })
 
-prevBtn.addEventListener('click',function(){
+prevBtn.addEventListener('click', function () {
     previousSong()
     // audio.play()
     playImage.src = "icons/pause.png";
@@ -134,22 +144,25 @@ prevBtn.addEventListener('click',function(){
 ///// Update progress value
 
 function updateProgressValue() {
+
     range.max = audio.duration;
     range.value = audio.currentTime;
     document.querySelector('.currentTime').innerHTML = (formatTime(Math.floor(audio.currentTime)));
-    if (document.querySelector('.durationTime').innerHTML === "NaN:NaN") {
+
+    if (document.querySelector('.durationTime').innerText === "NaN:NaN") {
         document.querySelector('.durationTime').innerHTML = "0:00";
     } else {
         document.querySelector('.durationTime').innerHTML = (formatTime(Math.floor(audio.duration)));
     }
+
 };
 
 // convert song.currentTime and song.duration into MM:SS format
 function formatTime(seconds) {
     let min = Math.floor((seconds / 60));
     let sec = Math.floor(seconds - (min * 60));
-    if (sec < 10){ 
-        sec  = `0${sec}`;
+    if (sec < 10) {
+        sec = `0${sec}`;
     };
     return `${min}:${sec}`;
 };
@@ -159,7 +172,7 @@ setInterval(updateProgressValue, 500);
 
 // function where progressBar.value is changed when slider thumb is dragged without auto-playing audio
 
-range.addEventListener('change', function(){
+range.addEventListener('change', function () {
     audio.currentTime = range.value;
 
 })
@@ -178,7 +191,7 @@ let arrayShuffle = function (arr) {
     return arr
 }
 
-shuffleBtn.addEventListener('click', function(){
+shuffleBtn.addEventListener('click', function () {
 
     arrayShuffle(songList);
     audio.src = `music/${songList[songIndex].songName} - ${songList[songIndex].artist}.mp3`;
@@ -210,8 +223,84 @@ search.addEventListener('input', filter)
 
 //////////// Creating a new playlist //////////////////
 
+savePlaylistBtn.style.display = "none";
+
+let playlistArray = []
+
+createPlaylistBtn.addEventListener('click', function () {
+    console.log("clicked");
+
+    const checkboxItems = document.querySelectorAll(".checkboxItems");
+
+    for (let i = 0; i < checkboxItems.length; i++) {
+        checkboxItems[i].style.display = 'block';
+    }
+
+    createPlaylistBtn.style.display = "none";
+    savePlaylistBtn.style.display = "";
+
+})
 
 
+///////
+
+
+const createPlaylist = () => {
+    const list = document.createElement('ul');
+    list.id = "ulPlaylist";
+
+    for (let i = 0; i < playlistArray.length; i++) {
+        let item = document.createElement('li');
+        item.className = "liPlaylist";
+        item.appendChild(document.createTextNode(playlistArray[i]))
+        list.appendChild(item)
+    }
+    return list
+}
+
+savePlaylistBtn.addEventListener('click', function () {
+
+
+    let checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
+
+    for (var i = 0; i < checkboxes.length; i++) {
+        playlistArray.push(checkboxes[i].value)
+    }
+
+    console.log(playlistArray);
+
+    createPlaylist();
+
+    if (playlistArray.length > 0) {
+
+        console.log('clicked');
+        playlistContainer.appendChild(createPlaylist());
+        playlistContainer.style.display = "block";
+    }
+
+
+    const checkboxItems = document.querySelectorAll(".checkboxItems");
+    for (let i = 0; i < checkboxItems.length; i++) {
+        checkboxItems[i].style.display = 'none';
+    }
+
+
+    createPlaylistBtn.style.display = "";
+    savePlaylistBtn.style.display = "none";
+
+})
+
+playlistContainer.onclick = (e) => {
+    console.log(e);
+    const clickedItem = e.target;
+    audio.src = '/music/' + clickedItem.innerText + '.mp3';
+    songTitle.innerText = clickedItem.innerText;
+    // console.log('/music/' + clickedItem.innerText + '.mp3');
+    songIndex = songList
+    playImage.src = "icons/pause.png";
+
+    audio.play();
+}
 
 
 ///// Idle mode
@@ -238,7 +327,7 @@ search.addEventListener('input', filter)
 
 ////////
 
-window.onload = function() {
+window.onload = function () {
     audio.src = `/music/${songList[songIndex].songName} - ${songList[songIndex].artist}.mp3`;
     songTitle.innerText = `${songList[songIndex].songName} - ${songList[songIndex].artist}`
     // inactivityTime();
