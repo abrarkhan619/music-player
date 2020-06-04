@@ -1,17 +1,22 @@
-let playBtn = document.getElementById("play");
-let prevBtn = document.getElementById("previous");
-let nextBtn = document.getElementById("next");
-let range = document.querySelector("#range");
-let playImage = document.getElementById("playImage")
-let audio = document.getElementById("audio")
+const playBtn = document.getElementById("play");
+const prevBtn = document.getElementById("previous");
+const nextBtn = document.getElementById("next");
+const shuffleBtn = document.getElementById("shuffle");
+const range = document.getElementById("range");
+const playImage = document.getElementById("playImage")
+const audio = document.getElementById("audio")
 const listContainer = document.getElementById("listContainer")
 const songTitle = document.getElementById("songTitle")
+const search = document.getElementById("search")
+// const ulAllSongs = document.getElementById("ulAllSongs")
+// const liAllSongs = document.getElementById("liAllSongs")
+const ul = document.get
 let totalTime = 0;
 let currentTime = 0;
 let songIndex = 0;
 let isPlaying = false;
 
-window.onload = playSong;
+// window.onload = playSong;
 
 class song {
     constructor(id, songName, artist, thumbnail) {
@@ -48,10 +53,12 @@ const songList = [
 ]
 
 const createSongList = () => {
-    const list = document.createElement('ul')
+    const list = document.createElement('ul');
+    list.id = "ulAllSongs";
 
     for (let i = 0; i < songList.length; i++) {
         const item = document.createElement('li');
+        item.className = "liAllSongs";
         item.appendChild(document.createTextNode(songList[i].songName + " - " + songList[i].artist))
         list.appendChild(item)
     }
@@ -109,7 +116,7 @@ function nextSong() {
     songIndex++;
     if (songIndex > songList.length - 1) { songIndex = 0 };
     audio.src = `music/${songList[songIndex].songName} - ${songList[songIndex].artist}.mp3`;
-    songTitle.innerText = `${songList[songIndex].songName} - ${songList[songIndex].artist}`
+    songTitle.innerText = `${songList[songIndex].songName} - ${songList[songIndex].artist}`;
 }
 
 function previousSong() {
@@ -132,3 +139,99 @@ prevBtn.addEventListener('click',function(){
 })
 
 /// Shuffle songs
+let arrayShuffle = function (arr) {
+    let newPos;
+    let temp;
+    for (let i = arr.length - 1; i > 0; i--) {
+        newPos = Math.floor(Math.random() * (i + 1))
+        temp = arr[i];
+        arr[i] = arr[newPos]
+        arr[newPos] = temp;
+    }
+    return arr
+}
+
+shuffleBtn.addEventListener('click', function(){
+
+    arrayShuffle(songList);
+    audio.src = `music/${songList[songIndex].songName} - ${songList[songIndex].artist}.mp3`;
+    songTitle.innerText = `${songList[songIndex].songName} - ${songList[songIndex].artist}`;
+    // audio.play()
+    playImage.src = "icons/play.png";
+})
+
+///// Idle mode
+
+// let inactivityTime = function () {
+//     let time;
+//     window.onload = resetTimer;
+//     // DOM Events
+//     document.onmousemove = resetTimer;
+//     document.onkeypress = resetTimer;
+//     document.onclick = resetTimer;
+
+//     function logout() {
+//         alert("You are now logged out.")
+//         //location.href = 'logout.html'
+//     }
+
+//     function resetTimer() {
+//         clearTimeout(time);
+//         time = setTimeout(logout, 5000)
+//         // 1000 milliseconds = 1 second
+//     }
+// };
+
+//// Filter search
+const liAllSongs = document.getElementsByClassName("liAllSongs")
+const ulAllSongs = document.getElementById("ulAllSongs")
+const listElements = [...liAllSongs]
+
+
+const filter = () => {
+    const searchValue = search.value.toLowerCase();
+    listElements.forEach(listElement => {
+        const stringFound =
+            listElement.innerText.toLowerCase().indexOf(searchValue) !== -1;
+        if (stringFound) {
+            /**
+             ** Make list item visible
+             **/
+            listElement.style.display = "block";
+        } else {
+            /**
+             ** Make list item invisible
+             **/
+            listElement.style.display = "none";
+        }
+    });
+};
+
+search.addEventListener('input', filter)
+
+// function filter(){
+    
+//     var filterValue, ul,li,a,i;
+//     filterValue = search.value.toUppCase();
+//     const ulAllSongs = document.getElementById("ulAllSongs")
+//     const liAllSongs = document.getElementById("liAllSongs")
+//     ul = document.getElementById("Menu");
+//      li = ul.getElementsByTagName("li");
+        
+//         for (i = 0 ; i < liAllSongs.length ; i++){
+//             // a = liAllSongs[i].getElementsByTagName("a")[0];
+//             if(liAllSongs.innerText.toUpperCase().indexOf(filterValue) > -1){
+//                 liAllSongs[i].style.display = "";
+                
+//             }else{
+//                 liAllSongs[i].style.display = "none";
+//             }
+//         }
+//     }
+
+///////
+
+window.onload = function() {
+    playSong();
+    // inactivityTime();
+}
