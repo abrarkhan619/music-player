@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito&family=Nunito+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+
 *{
     margin: 0;
     padding: 0;
@@ -27,8 +29,9 @@ body{
     background-color: #E1E6EC;
     box-shadow: 5px 5px 11px #A2B1C6 , -5px -5px 11px  #fff  ;
     text-align: center;
-    font-family: 'Nunito', sans-serif;
-    
+    /* font-family: 'Nunito', sans-serif; */
+    font-family: 'Roboto', sans-serif;
+    padding-bottom: 18px; /*to allow playlist and shuffle space*/
 }
 
 #listContainer {
@@ -51,14 +54,16 @@ body{
 .wrapper{
     position: relative;
 }
+
 .container img{
     width: 80%;
-   
 }
+
 .container h1{
     font-size: 1.5rem;
     margin: 12px 0 12px 0;
 }
+
 .buttons{
     display: inline-block;
     width: 100%;
@@ -66,6 +71,7 @@ body{
     margin: 0;
     text-align: center;
 }
+
 .buttons button{
     position: relative;
     width: 50px;
@@ -104,8 +110,7 @@ body{
     position: absolute;
     width: 20px;
     height: 20px;
-    /* padding: 5px; */
-    margin-left: 130px;
+    margin-left: -20px;
     border-radius: 90px;
     background-color: #E1E6EC;
     border: none;
@@ -171,6 +176,7 @@ ul {
     box-shadow: 5px 5px 11px #A2B1C6 , -5px -5px 11px  #fff  ;
     text-align: center;
     font-family: 'Nunito', sans-serif; */
+    min-height: 400px;
 }
 
 ul li{
@@ -188,6 +194,7 @@ ul li{
     align-items: center;
     /* margin: 10px 9px; */
     border: none;
+    font-family: 'Roboto', sans-serif;
     /* box-shadow: 2px 2px 5px #A2B1C6 , -2px -2px 11px  #fff  ; */
     /* background:linear-gradient(-45deg,#a2b1c6,#fff); */
 }
@@ -197,15 +204,19 @@ ul li:active{
     box-shadow: inset 2px 2px 5px #A2B1C6 , -2px -2px 11px  #fff  ;
 }
 
-#search {
+#searchContainer {
     margin-top: 20px;
     width: 300px;
     height: 40px;
-    border-radius: 8px;
+    /* border-radius: 10px; */
     background-color: #E1E6EC;
     box-shadow: 5px 5px 11px #A2B1C6 , -5px -5px 11px  #fff  ;
-    text-align: center;
+    /* text-align: left; */
     font-family: 'Nunito', sans-serif;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     /* display: flex;
     align-items: center;
@@ -220,4 +231,39 @@ ul li:active{
     /* align-items: center; */
     /* margin: 10px 9px; */
     border: none;
+}
+
+#search{
+    width: 300px;
+    height: 40px;
+    margin-left: 10px;
+    background-color: #E1E6EC;
+    text-align: left;
+    font-family: 'Nunito', sans-serif;
+
+    font-size: 16px;
+   
+    border: none;
+}
+
+#searchImage {
+    width: 30px;
+    margin-left: 5px;
+}
+
+#createPlaylistBtn{
+    /* position: fixed; */
+    width: 100px;
+    height: 20px;
+    margin-top: -10px;
+    margin-right: 190px;
+    border-radius: 10px;
+    background-color: #E1E6EC;
+    border: none;
+    box-shadow: 2px 2px 5px #A2B1C6 , -2px -2px 11px  #fff;
+}
+
+#createPlaylistBtn:active{
+    background: #E1E6EC;
+    box-shadow: inset 2px 2px 5px #A2B1C6 , -2px -2px 11px  #fff  ;
 }

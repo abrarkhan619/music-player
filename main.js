@@ -3,21 +3,20 @@ const prevBtn = document.getElementById("previous");
 const nextBtn = document.getElementById("next");
 const shuffleBtn = document.getElementById("shuffle");
 const range = document.getElementById("range");
-const playImage = document.getElementById("playImage")
-const audio = document.getElementById("audio")
-const listContainer = document.getElementById("listContainer")
-const songTitle = document.getElementById("songTitle")
-const search = document.getElementById("search")
-// const ulAllSongs = document.getElementById("ulAllSongs")
-// const liAllSongs = document.getElementById("liAllSongs")
-const ul = document.get
+const playImage = document.getElementById("playImage");
+const audio = document.getElementById("audio");
+const listContainer = document.getElementById("listContainer");
+const songTitle = document.getElementById("songTitle");
+const search = document.getElementById("search");
+const createPlaylistBtn = document.getElementById("createPlaylistBtn");
+
 let totalTime = 0;
 let currentTime = 0;
 let songIndex = 0;
 let isPlaying = false;
 
-// window.onload = playSong;
-
+// Class object constructor (I think its called)
+ 
 class song {
     constructor(id, songName, artist, thumbnail) {
         this.id = id
@@ -52,6 +51,8 @@ const songList = [
     memories = new song(9, "Memories", "Maroon 5", "memories"),
 ]
 
+/// Creating visible songlist from above
+
 const createSongList = () => {
     const list = document.createElement('ul');
     list.id = "ulAllSongs";
@@ -74,6 +75,8 @@ listContainer.onclick = (e) => {
     songTitle.innerText = clickedItem.innerText;
     // console.log('/music/' + clickedItem.innerText + '.mp3');
     songIndex = songList
+    playImage.src = "icons/pause.png";
+
     audio.play();
 }
 
@@ -138,7 +141,8 @@ prevBtn.addEventListener('click',function(){
     playImage.src = "icons/pause.png";
 })
 
-/// Shuffle songs
+///// Shuffle songs
+
 let arrayShuffle = function (arr) {
     let newPos;
     let temp;
@@ -159,6 +163,33 @@ shuffleBtn.addEventListener('click', function(){
     // audio.play()
     playImage.src = "icons/play.png";
 })
+
+//// Filter search list
+
+const filter = () => {
+    const liAllSongs = document.getElementsByClassName("liAllSongs")
+    let listElements = [...liAllSongs] // created new array
+
+    const searchValue = search.value.toLowerCase();
+    listElements.forEach(listElement => {
+        const stringFound = listElement.innerText.toLowerCase().indexOf(searchValue) !== -1;
+        if (stringFound) {
+            //Make list item visible//
+            listElement.style.display = "";
+        } else {
+            //Make list item invisible
+            listElement.style.display = "none";
+        }
+    });
+};
+
+search.addEventListener('input', filter)
+
+//////////// Creating a new playlist //////////////////
+
+
+
+
 
 ///// Idle mode
 
@@ -182,54 +213,7 @@ shuffleBtn.addEventListener('click', function(){
 //     }
 // };
 
-//// Filter search
-const liAllSongs = document.getElementsByClassName("liAllSongs")
-const ulAllSongs = document.getElementById("ulAllSongs")
-const listElements = [...liAllSongs]
-
-
-const filter = () => {
-    const searchValue = search.value.toLowerCase();
-    listElements.forEach(listElement => {
-        const stringFound =
-            listElement.innerText.toLowerCase().indexOf(searchValue) !== -1;
-        if (stringFound) {
-            /**
-             ** Make list item visible
-             **/
-            listElement.style.display = "block";
-        } else {
-            /**
-             ** Make list item invisible
-             **/
-            listElement.style.display = "none";
-        }
-    });
-};
-
-search.addEventListener('input', filter)
-
-// function filter(){
-    
-//     var filterValue, ul,li,a,i;
-//     filterValue = search.value.toUppCase();
-//     const ulAllSongs = document.getElementById("ulAllSongs")
-//     const liAllSongs = document.getElementById("liAllSongs")
-//     ul = document.getElementById("Menu");
-//      li = ul.getElementsByTagName("li");
-        
-//         for (i = 0 ; i < liAllSongs.length ; i++){
-//             // a = liAllSongs[i].getElementsByTagName("a")[0];
-//             if(liAllSongs.innerText.toUpperCase().indexOf(filterValue) > -1){
-//                 liAllSongs[i].style.display = "";
-                
-//             }else{
-//                 liAllSongs[i].style.display = "none";
-//             }
-//         }
-//     }
-
-///////
+////////
 
 window.onload = function() {
     playSong();
