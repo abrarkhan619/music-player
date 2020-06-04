@@ -13,18 +13,16 @@ const createPlaylistBtn = document.getElementById("createPlaylistBtn");
 const savePlaylistBtn = document.getElementById("savePlaylistBtn");
 
 
-let totalTime = 0;
 let currentTime = 0;
 let songIndex = 0;
 let isPlaying = true;
 
-// Class object constructor (I think its called)
+// Class object constructor
 
 class song {
-    constructor(id, songName, artist, thumbnail) {
+    constructor(id, songName, thumbnail) {
         this.id = id
         this.songName = songName;
-        this.artist = artist;
         this.thumbnail = thumbnail;
     }
     id() {
@@ -33,25 +31,22 @@ class song {
     songName() {
         return this.songName
     }
-    artist() {
-        return this.artist
-    }
     thumbnail() {
         return this.thumbnail
     }
 }
 
 const songList = [
-    anything = new song(0, "Anything", "Jay Z", "anything"),
-    shutup = new song(1, "Shut Up", "Stormzy", "shutup"),
-    energy = new song(2, "Energy", "Drake", "energy"),
-    goCrazy = new song(3, "Go Crazy", "Chris Brown", "goCrazy"),
-    lifeIsGood = new song(4, "Life is Good", "Future", "lifeIsGood"),
-    ownIt = new song(5, "Own it", "Stormzy", "ownIt"),
-    heat = new song(6, "Heat", "Chris Brown", "heat"),
-    hello = new song(7, "Hello", "Adele", "hello"),
-    loyal = new song(8, "Loyal", "Chris Brown", "loyal"),
-    memories = new song(9, "Memories", "Maroon 5", "memories"),
+    anything = new song(0, "Anything - Jay Z", "anything"),
+    shutup = new song(1, "Shut Up - Stormzy", "shutup"),
+    energy = new song(2, "Energy - Drake", "energy"),
+    goCrazy = new song(3, "Go Crazy - Chris Brown", "goCrazy"),
+    lifeIsGood = new song(4, "Life is Good - Future", "lifeIsGood"),
+    ownIt = new song(5, "Own it - Stormzy", "ownIt"),
+    heat = new song(6, "Heat - Chris Brown", "heat"),
+    hello = new song(7, "Hello - Adele", "hello"),
+    loyal = new song(8, "Loyal - Chris Brown", "loyal"),
+    memories = new song(9, "Memories - Maroon 5", "memories"),
 ]
 
 /// Creating visible songlist from above
@@ -66,11 +61,11 @@ const createSongList = () => {
 
         inputItem.className = "checkboxItems"
         inputItem.setAttribute('type', 'checkbox')
-        inputItem.setAttribute('value', songList[i].songName + " - " + songList[i].artist)
+        inputItem.setAttribute('value', songList[i].songName)
 
         item.className = "liAllSongs";
         item.appendChild(inputItem)
-        item.appendChild(document.createTextNode(songList[i].songName + " - " + songList[i].artist))
+        item.appendChild(document.createTextNode(songList[i].songName))
         list.appendChild(item)
     }
     return list
@@ -78,15 +73,23 @@ const createSongList = () => {
 
 listContainer.appendChild(createSongList());
 
+/////////// Clicking song to play from list
+
 listContainer.onclick = (e) => {
-    console.log(e);
+    // console.log(e);
     const clickedItem = e.target;
     audio.src = '/music/' + clickedItem.innerText + '.mp3';
     songTitle.innerText = clickedItem.innerText;
-    // console.log('/music/' + clickedItem.innerText + '.mp3');
-    songIndex = songList
     playImage.src = "icons/pause.png";
 
+    for (let i = 0; i < songList.length; i++) {
+        if (clickedItem.innerText == songList[i].songName) {
+            songIndex = i;  // changing song index based on song selected
+        } else {
+            console.log("no match");
+        }
+    }
+    // console.log(songIndex);
     audio.play();
 }
 
@@ -114,8 +117,8 @@ audio.addEventListener('ended', nextSong);
 function nextSong() {
     songIndex++;
     if (songIndex > songList.length - 1) { songIndex = 0 };
-    audio.src = `music/${songList[songIndex].songName} - ${songList[songIndex].artist}.mp3`;
-    songTitle.innerText = `${songList[songIndex].songName} - ${songList[songIndex].artist}`;
+    audio.src = `music/${songList[songIndex].songName}.mp3`;
+    songTitle.innerText = songList[songIndex].songName;
     isPlaying = true;
     playSong();
 }
@@ -123,8 +126,8 @@ function nextSong() {
 function previousSong() {
     songIndex--;
     if (songIndex < 0) { songIndex = songList.length - 1 };
-    audio.src = `music/${songList[songIndex].songName} - ${songList[songIndex].artist}.mp3`;
-    songTitle.innerText = `${songList[songIndex].songName} - ${songList[songIndex].artist}`
+    audio.src = `music/${songList[songIndex].songName}.mp3`;
+    songTitle.innerText = songList[songIndex].songName;
     isPlaying = true;
     playSong();
 }
@@ -194,8 +197,8 @@ let arrayShuffle = function (arr) {
 shuffleBtn.addEventListener('click', function () {
 
     arrayShuffle(songList);
-    audio.src = `music/${songList[songIndex].songName} - ${songList[songIndex].artist}.mp3`;
-    songTitle.innerText = `${songList[songIndex].songName} - ${songList[songIndex].artist}`;
+    audio.src = `music/${songList[songIndex].songName}.mp3`;
+    songTitle.innerText = songList[songIndex].songName;
     // audio.play()
     playImage.src = "icons/play.png";
 })
@@ -223,6 +226,7 @@ search.addEventListener('input', filter)
 
 //////////// Creating a new playlist //////////////////
 
+let playlistIndex = 0;
 savePlaylistBtn.style.display = "none";
 
 let playlistArray = []
@@ -296,8 +300,18 @@ playlistContainer.onclick = (e) => {
     audio.src = '/music/' + clickedItem.innerText + '.mp3';
     songTitle.innerText = clickedItem.innerText;
     // console.log('/music/' + clickedItem.innerText + '.mp3');
-    songIndex = songList
     playImage.src = "icons/pause.png";
+
+    // This would require a lot repeat code from play, next, previous functions above
+    // for (let i = 0; i < playlistArray.length; i++) {
+    //     if (clickedItem.innerText == playlistArray[i]) {
+    //         playlistIndex = i  // changing song index based on song selected
+    //         console.log(i);
+            
+    //     } else {
+    //         console.log("no match");
+    //     }
+    // }
 
     audio.play();
 }
@@ -328,7 +342,7 @@ playlistContainer.onclick = (e) => {
 ////////
 
 window.onload = function () {
-    audio.src = `/music/${songList[songIndex].songName} - ${songList[songIndex].artist}.mp3`;
-    songTitle.innerText = `${songList[songIndex].songName} - ${songList[songIndex].artist}`
+    audio.src = `/music/${songList[songIndex].songName}.mp3`;
+    songTitle.innerText = songList[songIndex].songName;
     // inactivityTime();
 }
