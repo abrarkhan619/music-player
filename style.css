@@ -261,6 +261,11 @@ ul li:active{
     box-shadow: inset 2px 2px 5px #A2B1C6 , -2px -2px 11px  #fff  ;
 }
 
+/* .liAllSongs {
+    display: flex;
+    justify-content: center;
+} */
+
 #searchContainer {
     margin-top: 20px;
     width: 300px;
@@ -322,10 +327,6 @@ ul li:active{
     margin-left: 260px;
 }
 
-.checkboxItems {
-    display: none;
-}
-
 #playlistContainer {
     display: none;
     margin-top: 20px;
@@ -343,3 +344,62 @@ ul li:active{
     text-decoration: underline;
     /* font-weight: bolder; */
 }
+
+input[type='checkbox']:after{
+    line-height: 1.5em;
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-top: -4px;
+    margin-left: -4px;
+    border: 1px solid rgb(192,192,192);
+    border-radius: 0.25em;
+    background: rgb(224,224,224);
+}
+
+input[type='checkbox']:checked:after {
+    width: 15px;
+    height: 15px;
+    border: 3px solid #00ff00;
+}
+
+.checkboxItems {
+    display: none;
+}
+
+/*popup test*/
+
+#popup {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    padding: 25px;
+    box-shadow: 0 5px 30px rgb(0,0,0,.30);
+    background: #fff;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.5s;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+}
+
+#popup.active {
+    visibility: visible;
+    opacity: 1;
+    transition: 0.5s;
+}
+
+#closePopup {
+    background-color: rgb(0, 0, 0); /* Green */
+    margin-top: 10px;
+    border: none;
+    color: white;
+    padding: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }

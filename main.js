@@ -11,6 +11,8 @@ const songTitle = document.getElementById("songTitle");
 const search = document.getElementById("search");
 const createPlaylistBtn = document.getElementById("createPlaylistBtn");
 const savePlaylistBtn = document.getElementById("savePlaylistBtn");
+const liAllSongs = document.getElementsByClassName("liAllSongs")
+
 
 
 let currentTime = 0;
@@ -64,9 +66,9 @@ const createSongList = () => {
         inputItem.setAttribute('value', songList[i].songName)
 
         item.className = "liAllSongs";
-        item.appendChild(inputItem)
         item.appendChild(document.createTextNode(songList[i].songName))
         list.appendChild(item)
+        item.appendChild(inputItem)
     }
     return list
 }
@@ -90,6 +92,7 @@ listContainer.onclick = (e) => {
         }
     }
     // console.log(songIndex);
+
     audio.play();
 }
 
@@ -152,11 +155,17 @@ function updateProgressValue() {
     range.value = audio.currentTime;
     document.querySelector('.currentTime').innerHTML = (formatTime(Math.floor(audio.currentTime)));
 
-    if (document.querySelector('.durationTime').innerText === "NaN:NaN") {
+    // if (document.querySelector('.durationTime').innerHTML === "NaN:NaN") {
+    //     document.querySelector('.durationTime').style.visibility = "hidden";
+    // } else {
+    //     document.querySelector('.durationTime').style.visibility = "visible";
+    //     document.querySelector('.durationTime').innerHTML = (formatTime(Math.floor(audio.duration)));
+    // }
+    document.querySelector('.durationTime').innerHTML = (formatTime(Math.floor(audio.duration)));
+
+    if (document.querySelector('.durationTime').innerHTML === "undefined") {
         document.querySelector('.durationTime').innerHTML = "0:00";
-    } else {
-        document.querySelector('.durationTime').innerHTML = (formatTime(Math.floor(audio.duration)));
-    }
+    } 
 
 };
 
@@ -167,7 +176,12 @@ function formatTime(seconds) {
     if (sec < 10) {
         sec = `0${sec}`;
     };
-    return `${min}:${sec}`;
+
+    if (isNaN(seconds)) {
+        return undefined
+    } else {
+       return `${min}:${sec}`; 
+    }
 };
 
 // run updateProgressValue ever 500 ms
@@ -206,7 +220,7 @@ shuffleBtn.addEventListener('click', function () {
 //// Filter search list
 
 const filter = () => {
-    const liAllSongs = document.getElementsByClassName("liAllSongs")
+    // const liAllSongs = document.getElementsByClassName("liAllSongs")
     let listElements = [...liAllSongs] // created new array
 
     const searchValue = search.value.toLowerCase();
@@ -233,6 +247,14 @@ let playlistArray = []
 
 createPlaylistBtn.addEventListener('click', function () {
     console.log("clicked");
+
+    // const liAllSongs = document.getElementsByClassName("liAllSongs")
+
+    // liAllSongs.style.justifyContent = "space-between";
+
+    document.querySelector(".liAllSongs").style.justifyContent = "space-between";
+
+
 
     const checkboxItems = document.querySelectorAll(".checkboxItems");
 
@@ -316,33 +338,66 @@ playlistContainer.onclick = (e) => {
     audio.play();
 }
 
-
 ///// Idle mode
 
-// let inactivityTime = function () {
-//     let time;
-//     window.onload = resetTimer;
-//     // DOM Events
-//     document.onmousemove = resetTimer;
-//     document.onkeypress = resetTimer;
-//     document.onclick = resetTimer;
+let inactivityTime = function () {
+    let time;
+    window.onload = resetTimer();
 
-//     function logout() {
-//         alert("You are now logged out.")
-//         //location.href = 'logout.html'
-//     }
+    const popup = document.getElementById('popup');
+    const closePopup = document.getElementById("closePopup")
 
-//     function resetTimer() {
-//         clearTimeout(time);
-//         time = setTimeout(logout, 5000)
-//         // 1000 milliseconds = 1 second
-//     }
-// };
+    function showPopup() {
+        popup.classList.toggle('active');
+    }
 
-////////
+    closePopup.addEventListener('click', function () {
+        popup.classList.toggle('active');
+        console.log("clicked popup");
+        resetTimer()
+    })
+    
+
+    function resetTimer() {
+        clearTimeout(time);
+        time = setTimeout(showPopup, 3000)
+        // 1000 milliseconds = 1 second
+    }
+};
+
+////////// key press events //////////
+
+function checkKeyPress(key){
+    if (key.keyCode == "37") {
+        previousSong()
+        // audio.play()
+        playImage.src = "icons/pause.png";
+    } 
+    else if (key.keyCode == "39") {
+        nextSong()
+        // audio.play()
+        playImage.src = "icons/pause.png";
+    }
+}
+
+window.addEventListener("keydown", checkKeyPress, false);
 
 window.onload = function () {
     audio.src = `/music/${songList[songIndex].songName}.mp3`;
     songTitle.innerText = songList[songIndex].songName;
-    // inactivityTime();
+
+    inactivityTime();
 }
+
+// // module.exports = songList;
+// nextBtn.addEventListener('click', function () {
+//     nextSong()
+//     // audio.play()
+//     playImage.src = "icons/pause.png";
+// })
+
+// prevBtn.addEventListener('click', function () {
+//     previousSong()
+//     // audio.play()
+//     playImage.src = "icons/pause.png";
+// })
