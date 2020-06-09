@@ -213,8 +213,8 @@ shuffleBtn.addEventListener('click', function () {
     arrayShuffle(songList);
     audio.src = `music/${songList[songIndex].songName}.mp3`;
     songTitle.innerText = songList[songIndex].songName;
-    // audio.play()
-    playImage.src = "icons/play.png";
+    audio.play()
+    playImage.src = "icons/pause.png";
 })
 
 //// Filter search list
@@ -243,23 +243,18 @@ search.addEventListener('input', filter)
 let playlistIndex = 0;
 savePlaylistBtn.style.display = "none";
 
-let playlistArray = []
+// let playlistArray = []
 
 createPlaylistBtn.addEventListener('click', function () {
+    // playlistArray.splice(0, 2)
+
     console.log("clicked");
-
-    // const liAllSongs = document.getElementsByClassName("liAllSongs")
-
-    // liAllSongs.style.justifyContent = "space-between";
-
-    document.querySelector(".liAllSongs").style.justifyContent = "space-between";
-
-
 
     const checkboxItems = document.querySelectorAll(".checkboxItems");
 
     for (let i = 0; i < checkboxItems.length; i++) {
         checkboxItems[i].style.display = 'block';
+        liAllSongs[i].style.justifyContent = "space-between";
     }
 
     createPlaylistBtn.style.display = "none";
@@ -272,6 +267,10 @@ createPlaylistBtn.addEventListener('click', function () {
 
 
 const createPlaylist = () => {
+    // playlistArray = []
+    document.getElementById("playlistContainer").innerHTML = "<h2>My Playlist</h2>"
+
+
     const list = document.createElement('ul');
     list.id = "ulPlaylist";
 
@@ -285,9 +284,12 @@ const createPlaylist = () => {
 }
 
 savePlaylistBtn.addEventListener('click', function () {
-
+    playlistArray = []
 
     let checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
+    // playlistArray.splice(0, 3)
+    // console.log(playlistArray.length);
+    //
 
     for (var i = 0; i < checkboxes.length; i++) {
         playlistArray.push(checkboxes[i].value)
@@ -298,7 +300,6 @@ savePlaylistBtn.addEventListener('click', function () {
     createPlaylist();
 
     if (playlistArray.length > 0) {
-
         console.log('clicked');
         playlistContainer.appendChild(createPlaylist());
         playlistContainer.style.display = "block";
@@ -314,6 +315,10 @@ savePlaylistBtn.addEventListener('click', function () {
     createPlaylistBtn.style.display = "";
     savePlaylistBtn.style.display = "none";
 
+    for (let i = 0; i < checkboxItems.length; i++) {
+        liAllSongs[i].style.justifyContent = "";
+    }
+
 })
 
 playlistContainer.onclick = (e) => {
@@ -323,17 +328,6 @@ playlistContainer.onclick = (e) => {
     songTitle.innerText = clickedItem.innerText;
     // console.log('/music/' + clickedItem.innerText + '.mp3');
     playImage.src = "icons/pause.png";
-
-    // This would require a lot repeat code from play, next, previous functions above
-    // for (let i = 0; i < playlistArray.length; i++) {
-    //     if (clickedItem.innerText == playlistArray[i]) {
-    //         playlistIndex = i  // changing song index based on song selected
-    //         console.log(i);
-            
-    //     } else {
-    //         console.log("no match");
-    //     }
-    // }
 
     audio.play();
 }
@@ -368,7 +362,7 @@ let inactivityTime = function () {
 
     function resetTimer() {
         clearTimeout(time);
-        time = setTimeout(showPopup, 3000)
+        time = setTimeout(showPopup, 30000)
         // 1000 milliseconds = 1 second
     }
 };
@@ -394,7 +388,7 @@ window.onload = function () {
     audio.src = `/music/${songList[songIndex].songName}.mp3`;
     songTitle.innerText = songList[songIndex].songName;
 
-    inactivityTime();
+    // inactivityTime();
 }
 
 // // module.exports = songList;
