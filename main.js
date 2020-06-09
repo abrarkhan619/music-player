@@ -344,6 +344,14 @@ let inactivityTime = function () {
     let time;
     window.onload = resetTimer();
 
+    window.addEventListener('click', function(){
+        resetTimer()
+    })
+
+    window.addEventListener('mousemove', function(){
+        resetTimer()
+    })
+
     const popup = document.getElementById('popup');
     const closePopup = document.getElementById("closePopup")
 
