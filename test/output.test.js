@@ -14,5 +14,3 @@ test('Should contain Hello - Adele at index 7', () => {
     
     expect(songList[7].songName).toBe("Hello - Adele");
 });
-
-

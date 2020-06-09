@@ -27,7 +27,5 @@ const songList = [
     loyal = new song(8, "Loyal - Chris Brown", "loyal"),
     memories = new song(9, "Memories - Maroon 5", "memories"),
 ]
-
-// let myArray = ['Dan', 'Stuart', 'Ben'];
   
 module.exports = songList;

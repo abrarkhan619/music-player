@@ -51,7 +51,7 @@ const songList = [
     memories = new song(9, "Memories - Maroon 5", "memories"),
 ]
 
-/// Creating visible songlist from above
+/////////// Creating visible songlist from above
 
 const createSongList = () => {
     const list = document.createElement('ul');
@@ -74,6 +74,7 @@ const createSongList = () => {
 }
 
 listContainer.appendChild(createSongList());
+
 
 /////////// Clicking song to play from list
 
@@ -119,7 +120,9 @@ audio.addEventListener('ended', nextSong);
 
 function nextSong() {
     songIndex++;
-    if (songIndex > songList.length - 1) { songIndex = 0 };
+    if (songIndex > songList.length - 1) {
+        songIndex = 0;
+    }
     audio.src = `music/${songList[songIndex].songName}.mp3`;
     songTitle.innerText = songList[songIndex].songName;
     isPlaying = true;
@@ -128,7 +131,9 @@ function nextSong() {
 
 function previousSong() {
     songIndex--;
-    if (songIndex < 0) { songIndex = songList.length - 1 };
+    if (songIndex < 0) {
+        songIndex = songList.length - 1;
+    }
     audio.src = `music/${songList[songIndex].songName}.mp3`;
     songTitle.innerText = songList[songIndex].songName;
     isPlaying = true;
@@ -147,7 +152,7 @@ prevBtn.addEventListener('click', function () {
     playImage.src = "icons/pause.png";
 })
 
-///// Update progress value
+///////// Update progress value
 
 function updateProgressValue() {
 
@@ -155,12 +160,6 @@ function updateProgressValue() {
     range.value = audio.currentTime;
     document.querySelector('.currentTime').innerHTML = (formatTime(Math.floor(audio.currentTime)));
 
-    // if (document.querySelector('.durationTime').innerHTML === "NaN:NaN") {
-    //     document.querySelector('.durationTime').style.visibility = "hidden";
-    // } else {
-    //     document.querySelector('.durationTime').style.visibility = "visible";
-    //     document.querySelector('.durationTime').innerHTML = (formatTime(Math.floor(audio.duration)));
-    // }
     document.querySelector('.durationTime').innerHTML = (formatTime(Math.floor(audio.duration)));
 
     if (document.querySelector('.durationTime').innerHTML === "undefined") {
@@ -169,7 +168,8 @@ function updateProgressValue() {
 
 };
 
-// convert song.currentTime and song.duration into MM:SS format
+//////// convert song.currentTime and song.duration into MM:SS format
+
 function formatTime(seconds) {
     let min = Math.floor((seconds / 60));
     let sec = Math.floor(seconds - (min * 60));
@@ -184,14 +184,12 @@ function formatTime(seconds) {
     }
 };
 
-// run updateProgressValue ever 500 ms
 setInterval(updateProgressValue, 500);
 
-// function where progressBar.value is changed when slider thumb is dragged without auto-playing audio
+//// when slider thumb is dragged progress value
 
 range.addEventListener('change', function () {
     audio.currentTime = range.value;
-
 })
 
 ///// Shuffle songs
@@ -220,7 +218,6 @@ shuffleBtn.addEventListener('click', function () {
 //// Filter search list
 
 const filter = () => {
-    // const liAllSongs = document.getElementsByClassName("liAllSongs")
     let listElements = [...liAllSongs] // created new array
 
     const searchValue = search.value.toLowerCase();
@@ -238,18 +235,14 @@ const filter = () => {
 
 search.addEventListener('input', filter)
 
-//////////// Creating a new playlist //////////////////
+//////////// Creating a new playlist 
 
+let playlistArray = []
 let playlistIndex = 0;
 savePlaylistBtn.style.display = "none";
 
-// let playlistArray = []
 
 createPlaylistBtn.addEventListener('click', function () {
-    // playlistArray.splice(0, 2)
-
-    console.log("clicked");
-
     const checkboxItems = document.querySelectorAll(".checkboxItems");
 
     for (let i = 0; i < checkboxItems.length; i++) {
@@ -259,17 +252,13 @@ createPlaylistBtn.addEventListener('click', function () {
 
     createPlaylistBtn.style.display = "none";
     savePlaylistBtn.style.display = "";
-
 })
 
 
 ///////
 
-
 const createPlaylist = () => {
-    // playlistArray = []
     document.getElementById("playlistContainer").innerHTML = "<h2>My Playlist</h2>"
-
 
     const list = document.createElement('ul');
     list.id = "ulPlaylist";
@@ -283,19 +272,15 @@ const createPlaylist = () => {
     return list
 }
 
+
 savePlaylistBtn.addEventListener('click', function () {
     playlistArray = []
 
     let checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
-    // playlistArray.splice(0, 3)
-    // console.log(playlistArray.length);
-    //
 
     for (var i = 0; i < checkboxes.length; i++) {
         playlistArray.push(checkboxes[i].value)
     }
-
-    console.log(playlistArray);
 
     createPlaylist();
 
@@ -305,12 +290,10 @@ savePlaylistBtn.addEventListener('click', function () {
         playlistContainer.style.display = "block";
     }
 
-
     const checkboxItems = document.querySelectorAll(".checkboxItems");
     for (let i = 0; i < checkboxItems.length; i++) {
         checkboxItems[i].style.display = 'none';
     }
-
 
     createPlaylistBtn.style.display = "";
     savePlaylistBtn.style.display = "none";
@@ -326,9 +309,7 @@ playlistContainer.onclick = (e) => {
     const clickedItem = e.target;
     audio.src = '/music/' + clickedItem.innerText + '.mp3';
     songTitle.innerText = clickedItem.innerText;
-    // console.log('/music/' + clickedItem.innerText + '.mp3');
     playImage.src = "icons/pause.png";
-
     audio.play();
 }
 
@@ -362,22 +343,19 @@ let inactivityTime = function () {
 
     function resetTimer() {
         clearTimeout(time);
-        time = setTimeout(showPopup, 30000)
-        // 1000 milliseconds = 1 second
+        time = setTimeout(showPopup, 30000)  // 1000 milliseconds = 1 second
     }
 };
 
-////////// key press events //////////
+////////// key press events to change songs
 
 function checkKeyPress(key){
     if (key.keyCode == "37") {
         previousSong()
-        // audio.play()
         playImage.src = "icons/pause.png";
     } 
     else if (key.keyCode == "39") {
         nextSong()
-        // audio.play()
         playImage.src = "icons/pause.png";
     }
 }
@@ -388,18 +366,5 @@ window.onload = function () {
     audio.src = `/music/${songList[songIndex].songName}.mp3`;
     songTitle.innerText = songList[songIndex].songName;
 
-    // inactivityTime();
+    inactivityTime();
 }
-
-// // module.exports = songList;
-// nextBtn.addEventListener('click', function () {
-//     nextSong()
-//     // audio.play()
-//     playImage.src = "icons/pause.png";
-// })
-
-// prevBtn.addEventListener('click', function () {
-//     previousSong()
-//     // audio.play()
-//     playImage.src = "icons/pause.png";
-// })
