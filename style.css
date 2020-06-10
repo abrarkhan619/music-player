@@ -84,6 +84,11 @@ body{
     height: 75px;
 }
 
+#previous img, #next img{
+    height: 25px;
+    width: auto;
+}
+
 
 .buttons button:active{
     background: #E1E6EC;

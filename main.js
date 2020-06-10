@@ -13,8 +13,6 @@ const createPlaylistBtn = document.getElementById("createPlaylistBtn");
 const savePlaylistBtn = document.getElementById("savePlaylistBtn");
 const liAllSongs = document.getElementsByClassName("liAllSongs")
 
-
-
 let currentTime = 0;
 let songIndex = 0;
 let isPlaying = true;
@@ -93,8 +91,8 @@ listContainer.onclick = (e) => {
         }
     }
     // console.log(songIndex);
-
-    audio.play();
+    isPlaying = true;
+    playSong();
 }
 
 ////// Play song
@@ -164,7 +162,7 @@ function updateProgressValue() {
 
     if (document.querySelector('.durationTime').innerHTML === "undefined") {
         document.querySelector('.durationTime').innerHTML = "0:00";
-    } 
+    }
 
 };
 
@@ -255,8 +253,6 @@ createPlaylistBtn.addEventListener('click', function () {
 })
 
 
-///////
-
 const createPlaylist = () => {
     document.getElementById("playlistContainer").innerHTML = "<h2>My Playlist</h2>"
 
@@ -285,7 +281,7 @@ savePlaylistBtn.addEventListener('click', function () {
     createPlaylist();
 
     if (playlistArray.length > 0) {
-        console.log('clicked');
+        // console.log('clicked');
         playlistContainer.appendChild(createPlaylist());
         playlistContainer.style.display = "block";
     }
@@ -310,7 +306,8 @@ playlistContainer.onclick = (e) => {
     audio.src = '/music/' + clickedItem.innerText + '.mp3';
     songTitle.innerText = clickedItem.innerText;
     playImage.src = "icons/pause.png";
-    audio.play();
+    isPlaying = true;
+    playSong();
 }
 
 ///// Idle mode
@@ -340,7 +337,6 @@ let inactivityTime = function () {
         resetTimer()
     })
     
-
     function resetTimer() {
         clearTimeout(time);
         time = setTimeout(showPopup, 30000)  // 1000 milliseconds = 1 second
