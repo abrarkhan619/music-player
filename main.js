@@ -79,7 +79,7 @@ listContainer.appendChild(createSongList());
 listContainer.onclick = (e) => {
     // console.log(e);
     const clickedItem = e.target;
-    audio.src = '/music/' + clickedItem.innerText + '.mp3';
+    audio.src = ' music/' + clickedItem.innerText + '.mp3';
     songTitle.innerText = clickedItem.innerText;
     playImage.src = "icons/pause.png";
 
@@ -303,7 +303,7 @@ savePlaylistBtn.addEventListener('click', function () {
 playlistContainer.onclick = (e) => {
     console.log(e);
     const clickedItem = e.target;
-    audio.src = '/music/' + clickedItem.innerText + '.mp3';
+    audio.src = 'music/' + clickedItem.innerText + '.mp3';
     songTitle.innerText = clickedItem.innerText;
     playImage.src = "icons/pause.png";
     isPlaying = true;
@@ -359,7 +359,7 @@ function checkKeyPress(key){
 window.addEventListener("keydown", checkKeyPress, false);
 
 window.onload = function () {
-    audio.src = `/music/${songList[songIndex].songName}.mp3`;
+    audio.src = `music/${songList[songIndex].songName}.mp3`;
     songTitle.innerText = songList[songIndex].songName;
 
     inactivityTime();
