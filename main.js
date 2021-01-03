@@ -339,7 +339,7 @@ let inactivityTime = function () {
     
     function resetTimer() {
         clearTimeout(time);
-        time = setTimeout(showPopup, 30000)  // 1000 milliseconds = 1 second
+        time = setTimeout(showPopup, 60000)  // 1000 milliseconds = 1 second
     }
 };
 
